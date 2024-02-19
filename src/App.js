@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { AppProvider } from "./state";
+import { AppProvider } from "../state";
 import { About } from "./Steps/About";
 import { Stepper } from "./Steps/Stepper";
 
