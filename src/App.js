@@ -1,21 +1,23 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { AppProvider } from "/state";
-import { About } from "./Steps/About";
-import { Stepper } from "./Steps/Stepper";
-
+import logo from './logo.svg';
+import './App.css';
 
 function App() {
   return (
     <div className="App">
-     <AppProvider>
-        <Router>
-         <Stepper />
-          <Routes>
-            <Route path="/" element={<About />} />
-          </Routes>
-           
-        </Router>
-      </AppProvider>
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn Reactddd
+        </a>
+      </header>
     </div>
   );
 }
