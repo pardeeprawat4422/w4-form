@@ -60,7 +60,7 @@ body{font-family: "Inter", sans-serif;}
 
 .w4-wrapper .selection-panel .tool-input input{ margin: auto; width: calc(100% - 4px); height:100px; border: 0; border: 2px solid #e8eef1; box-sizing: border-box; border-radius: 15px; font-size: 16px; font-weight: 500; text-indent: 15px; background: #f1f5f7;}
 .w4-wrapper .selection-panel .tool-input input:focus{border-color: #9280FF; outline-color: #7288E2 !important;}
-.w4-wrapper .selection-panel .tool-input label{ position: absolute; pointer-events: none; transition: .2s ease all; height: 28px; font-size: 18px; line-height: 28px; letter-spacing: -.1px; color: #6e6e6e; margin: 0; padding-left: 18px; bottom: 33px; left: 2px; background: #f1f5f7;}
+.w4-wrapper .selection-panel .tool-input label{ position: absolute; pointer-events: none; transition: .2s ease all; height: 28px; font-size: 18px; line-height: 28px; letter-spacing: -.1px; color: #6e6e6e; margin: 0; padding-left: 18px; bottom: 33px; left: 2px;}
 .w4-wrapper .selection-panel .tool-input input:focus~label { position: absolute; font-size: 12px; line-height: 20px; color: #6e6e6e; transition: .15s ease-out all; height: 20px;
     margin-bottom: 28px;}
 
