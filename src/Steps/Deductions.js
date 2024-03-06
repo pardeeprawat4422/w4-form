@@ -40,16 +40,31 @@ export const Deductions = () => {
   
   useEffect(() => {
     function applyInitialHighlighting() {
-      document.querySelectorAll("input, select").forEach((element) => {
+      document.querySelectorAll('input[type="text"], select').forEach((element) => {
         const inputVal = element.value;
         const labelFor = element.getAttribute("id");
         const label = document.querySelector(`label[for='${labelFor}']`);
         if (label) {
           if (inputVal) {
-            label.classList.add("highlight");
-          } else {
-            label.classList.remove("highlight");
-          }
+      // Remove non-numeric characters from the input value
+      const numericValue = inputVal.replace(/\D/g, '');
+      
+      // Format the numeric value with commas every three digits
+      let formattedValue = '';
+      for (let i = numericValue.length - 1, j = 0; i >= 0; i--, j++) {
+        // Add comma after every three digits except for the first group of digits
+        if (j > 0 && j % 3 === 0) {
+          formattedValue = ',' + formattedValue;
+        }
+        formattedValue = numericValue[i] + formattedValue;
+      }
+      
+      // Update the input value with the formatted value
+      element.value = formattedValue;
+      label.classList.add("highlight");
+    } else {
+      label.classList.remove("highlight");
+    }
         }
       });
     }
@@ -63,21 +78,36 @@ export const Deductions = () => {
       const label = document.querySelector(`label[for='${labelFor}']`);
       if (label) {
         if (inputVal) {
-          label.classList.add("highlight");
-        } else {
-          label.classList.remove("highlight");
+      // Remove non-numeric characters from the input value
+      const numericValue = inputVal.replace(/\D/g, '');
+      
+      // Format the numeric value with commas every three digits
+      let formattedValue = '';
+      for (let i = numericValue.length - 1, j = 0; i >= 0; i--, j++) {
+        // Add comma after every three digits except for the first group of digits
+        if (j > 0 && j % 3 === 0) {
+          formattedValue = ',' + formattedValue;
         }
+        formattedValue = numericValue[i] + formattedValue;
+      }
+      
+      // Update the input value with the formatted value
+      event.target.value = formattedValue;
+      label.classList.add("highlight");
+    } else {
+      label.classList.remove("highlight");
+    }
       }
     }
 
     // Attach event listeners to inputs for immediate highlighting
-    document.querySelectorAll("input").forEach((input) => {
+    document.querySelectorAll('input[type="text"]').forEach((input) => {
       input.addEventListener("input", handleInputChange);
     });
 
     // Clean up event listeners on component unmount
     return () => {
-      document.querySelectorAll("input").forEach((input) => {
+      document.querySelectorAll('input[type="text"]').forEach((input) => {
         input.removeEventListener("input", handleInputChange);
       });
     };
