@@ -156,8 +156,7 @@ return (
 							<span class="value-two">200</span>
 						</div>
 						<input type="range" className="form-control-range" id={`periodrange${index + 1}`} value={value} onChange={(e) => setValue(e.target.value)} min="0" max="200"/>
-						<label for="emailaddress">Email Address</label>
-                        <p class="text-center font-weight-bold text-primary">{value}</p>
+                                               <p class="text-center font-weight-bold text-primary">{value}</p>
 					</div>
 					<div class="results-label-wrapper mb-5">
 						<h5 class=" mb-0"> Minimum <a class="tooltop-icon" role="tooltip" data-toggle="tooltip" title="Hooray!"></a></h5>
