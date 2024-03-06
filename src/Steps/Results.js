@@ -18,25 +18,40 @@ export const Results = () => {
   const [showEstimatedTotal, setShowEstimatedTotal] = useState(true);
   const [showFillingW4Form, setShowFillingW4Form] = useState(false);
   const [attributeValue, setAttributeValue] = useState("initialValue");
+  const [value, setValue] = useState(100);
   const navigate = useNavigate();
-  const numberOfJobs = 4;
+  const numberOfJobs = 1;
   const jobsData = [];
   for (let i = 0; i < numberOfJobs; i++) {
     jobsData.push({ name: `Job ${i + 1}` });
   }
   useEffect(() => {
     function applyInitialHighlighting() {
-        document.querySelectorAll('input, select').forEach((element) => {
+        document.querySelectorAll('input[type="text"]').forEach((element) => {
             const inputVal = element.value;
             const labelFor = element.getAttribute('id');
             const label = document.querySelector(`label[for='${labelFor}']`);
-            if (label) {
-                if (inputVal) {
-                    label.classList.add('highlight');
-                } else {
-                    label.classList.remove('highlight');
-                }
-            }
+            if (inputVal) {
+      // Remove non-numeric characters from the input value
+      const numericValue = inputVal.replace(/\D/g, '');
+      
+      // Format the numeric value with commas every three digits
+      let formattedValue = '';
+      for (let i = numericValue.length - 1, j = 0; i >= 0; i--, j++) {
+        // Add comma after every three digits except for the first group of digits
+        if (j > 0 && j % 3 === 0) {
+          formattedValue = ',' + formattedValue;
+        }
+        formattedValue = numericValue[i] + formattedValue;
+      }
+      
+      // Update the input value with the formatted value
+      element.value = formattedValue;
+      label.classList.add("highlight");
+    } else {
+      label.classList.remove("highlight");
+    }
+          
         });
     }
 
@@ -112,7 +127,7 @@ return (
 	  {showEstimatedTotal && (
         <Form id="steps-4" class="tab-wizard wizard-circle wizard clearfix" onSubmit={handleSubmit(saveEstimatedTotal)} >
 			<h2 class="text-center font-weight-bold display-4">Your estimated <br/>total federal refund</h2>
-			<h2 class="text-center font-weight-bold display-4 text-primary">$0</h2>
+			<h2 class="text-center font-weight-bold display-4 text-primary">$4,405</h2>
 
 			<h2 class="text-center font-weight-bold mt-5">Adjusting your withholdings</h2>
 			<p class="text-center mb-5">Use the slider(s) to adjust your refund estimate.</p>
@@ -138,9 +153,11 @@ return (
 					<div class="form-group">
 						<div class="range-value">
 							<span class="value-one">0</span>
-							<span class="value-two">0</span>
+							<span class="value-two">200</span>
 						</div>
-						<input type="range" class="form-control-range" id={`periodrange${index + 1}`} {...register(`periodrange-${index + 1}`)}/>
+						<input type="range" className="form-control-range" id={`periodrange${index + 1}`} value={value} onChange={(e) => setValue(e.target.value)} min="0" max="200"/>
+						<label for="emailaddress">Email Address</label>
+                        <p class="text-center font-weight-bold text-primary">{value}</p>
 					</div>
 					<div class="results-label-wrapper mb-5">
 						<h5 class=" mb-0"> Minimum <a class="tooltop-icon" role="tooltip" data-toggle="tooltip" title="Hooray!"></a></h5>
@@ -157,7 +174,7 @@ return (
 			 
 			<div class="estimate-panel py-5">
 				<h2 class="title">Your estimated total federal refund</h2>
-				<h2 class="value font-weight-bold">$99*</h2>
+				<h2 class="value font-weight-bold">$4,405*</h2>
 			</div>
 
 			<p class="text-center"><small>*This is an estimate for informational purposes only. Consult your tax professional regarding your individual tax situation.</small></p>
