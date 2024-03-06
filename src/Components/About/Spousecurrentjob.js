@@ -47,16 +47,44 @@ export const Spousecurrentjob = ({
 
   useEffect(() => {
     function applyInitialHighlighting() {
-      document.querySelectorAll("input, select").forEach((element) => {
+      document.querySelectorAll('input[type="text"]').forEach((element) => {
         const inputVal = element.value;
         const labelFor = element.getAttribute("id");
         const label = document.querySelector(`label[for='${labelFor}']`);
         if (label) {
-          if (inputVal) {
-            label.classList.add("highlight");
-          } else {
-            label.classList.remove("highlight");
-          }
+		  if (inputVal) {
+		  // Remove non-numeric characters from the input value
+		  const numericValue = inputVal.replace(/\D/g, '');
+		  
+		  // Format the numeric value with commas every three digits
+		  let formattedValue = '';
+		  for (let i = numericValue.length - 1, j = 0; i >= 0; i--, j++) {
+			// Add comma after every three digits except for the first group of digits
+			if (j > 0 && j % 3 === 0) {
+			  formattedValue = ',' + formattedValue;
+			}
+			formattedValue = numericValue[i] + formattedValue;
+		  }
+		  
+		  // Update the input value with the formatted value
+		  element.value = formattedValue;
+		  label.classList.add("highlight");
+		} else {
+		  label.classList.remove("highlight");
+		}
+        }
+      });
+	  
+	  document.querySelectorAll("select").forEach((element) => {
+		const inputVal = element.value;
+        const labelFor = element.getAttribute("id");
+        const label = document.querySelector(`label[for='${labelFor}']`);
+        if (label) {
+			if (inputVal) {
+			  label.classList.add("highlight");
+			} else {
+			  label.classList.remove("highlight");
+			}
         }
       });
     }
@@ -64,16 +92,27 @@ export const Spousecurrentjob = ({
     applyInitialHighlighting();
 
     // Attach event listeners to input and select elements to dynamically update highlighting
-    document.querySelectorAll("input, select").forEach((element) => {
+    document.querySelectorAll('input[type="text"]').forEach((element) => {
       element.addEventListener("input", updateHighlighting);
       element.addEventListener("change", updateHighlighting);
+    });
+	
+	// Attach event listeners to input and select elements to dynamically update highlighting
+    document.querySelectorAll("select").forEach((element) => {
+      element.addEventListener("input", updateHighlighting_select);
+      element.addEventListener("change", updateHighlighting_select);
     });
 
     return () => {
       // Clean up event listeners when component unmounts
-      document.querySelectorAll("input, select").forEach((element) => {
+      document.querySelectorAll('input[type="text"]').forEach((element) => {
         element.removeEventListener("input", updateHighlighting);
         element.removeEventListener("change", updateHighlighting);
+      });
+	  
+	  document.querySelectorAll("select").forEach((element) => {
+        element.removeEventListener("input", updateHighlighting_select);
+        element.removeEventListener("change", updateHighlighting_select);
       });
     };
   }, []);
@@ -82,18 +121,51 @@ export const Spousecurrentjob = ({
     setshowSpouseCurrentJobs(false);
     setShowSpouseJobs(true);
   };
+  
+  
   const updateHighlighting = (event) => {
-    const inputVal = event.target.value;
-    const labelFor = event.target.getAttribute("id");
-    const label = document.querySelector(`label[for='${labelFor}']`);
-    if (label) {
-      if (inputVal) {
-        label.classList.add("highlight");
-      } else {
-        label.classList.remove("highlight");
-      }
+	  const inputVal = event.target.value;
+	  const labelFor = event.target.getAttribute("id");
+	  const label = document.querySelector(`label[for='${labelFor}']`);
+	  
+	  if (label) {
+		if (inputVal) {
+		  // Remove non-numeric characters from the input value
+		  const numericValue = inputVal.replace(/\D/g, '');
+		  
+		  // Format the numeric value with commas every three digits
+		  let formattedValue = '';
+		  for (let i = numericValue.length - 1, j = 0; i >= 0; i--, j++) {
+			// Add comma after every three digits except for the first group of digits
+			if (j > 0 && j % 3 === 0) {
+			  formattedValue = ',' + formattedValue;
+			}
+			formattedValue = numericValue[i] + formattedValue;
+		  }
+		  
+		  // Update the input value with the formatted value
+		  event.target.value = formattedValue;
+		  label.classList.add("highlight");
+		} else {
+		  label.classList.remove("highlight");
+		}
+	  }
+ };
+
+const updateHighlighting_select = (event) => {
+  const inputVal = event.target.value;
+  const labelFor = event.target.getAttribute("id");
+  const label = document.querySelector(`label[for='${labelFor}']`);
+  
+  if (label) {
+    if (inputVal) {
+      
+      label.classList.add("highlight");
+    } else {
+      label.classList.remove("highlight");
     }
-  };
+  }
+};
   const addNewJob = () => {
     setNumberOfJobs((prevCount) => prevCount + 1);
     setTimeout(() => {
@@ -102,7 +174,7 @@ export const Spousecurrentjob = ({
         input.addEventListener("input", updateHighlighting);
       });
       document.querySelectorAll("select").forEach((input) => {
-        input.addEventListener("change", updateHighlighting);
+        input.addEventListener("change", updateHighlighting_select);
       });
     }, 0);
   };
@@ -115,7 +187,7 @@ export const Spousecurrentjob = ({
         input.addEventListener("input", updateHighlighting);
       });
       document.querySelectorAll("select").forEach((input) => {
-        input.addEventListener("change", updateHighlighting);
+        input.addEventListener("change", updateHighlighting_select);
       });
     }, 0);
   };
@@ -160,6 +232,7 @@ export const Spousecurrentjob = ({
                         required: "Please select an option",
                       })}
                       value="MyJob"
+					  checked
                     />
                     My job
                     <label class="form-check-label" for="radio1"></label>
