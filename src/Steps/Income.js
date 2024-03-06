@@ -121,57 +121,59 @@ export const Income = () => {
     document.getElementById("example").setAttribute("data-percentage", 45);
     navigate("/credits");
   };
-
+  
   useEffect(() => {
-    function applyInitialHighlighting() {
-      document.querySelectorAll("input, select").forEach((element) => {
-        const inputVal = element.value;
-        const labelFor = element.getAttribute("id");
-        const label = document.querySelector(`label[for='${labelFor}']`);
-        if (label) {
-          if (inputVal) {
-            label.classList.add("highlight");
-          } else {
-            label.classList.remove("highlight");
+  function applyInitialHighlighting() {
+  document.querySelectorAll('input[type="text"], select').forEach((element) => {
+    const inputVal = element.value;
+    const labelFor = element.getAttribute("id");
+    const label = document.querySelector(`label[for='${labelFor}']`);
+    if (label) {
+      if (inputVal) {
+        // Remove non-numeric characters from the input value
+        const numericValue = inputVal.replace(/\D/g, '');
+        
+        // Format the numeric value with commas every three digits
+        let formattedValue = '';
+        for (let i = numericValue.length - 1, j = 0; i >= 0; i--, j++) {
+          // Add comma after every three digits except for the first group of digits
+          if (j > 0 && j % 3 === 0) {
+            formattedValue = ',' + formattedValue;
           }
+          formattedValue = numericValue[i] + formattedValue;
         }
-      });
-    }
-
-    applyInitialHighlighting();
-
-    // Function to apply highlighting on input change
-    function handleInputChange(event) {
-      const inputVal = event.target.value;
-      const labelFor = event.target.id;
-      const label = document.querySelector(`label[for='${labelFor}']`);
-      if (label) {
-        if (inputVal) {
-          label.classList.add("highlight");
-        } else {
-          label.classList.remove("highlight");
-        }
+        
+        // Update the input value with the formatted value
+        element.value = formattedValue;
+        label.classList.add("highlight");
+      } else {
+        label.classList.remove("highlight");
       }
     }
+  });
+}
 
-    // Attach event listeners to inputs for immediate highlighting
-    document.querySelectorAll("input").forEach((input) => {
-      input.addEventListener("input", handleInputChange);
+
+  applyInitialHighlighting();
+
+  // Attach event listeners to input and select elements to dynamically update highlighting
+  document.querySelectorAll('input[type="text"]').forEach((element) => {
+    element.addEventListener("input", updateHighlighting);
+    
+  });
+
+  return () => {
+    // Clean up event listeners when component unmounts
+    document.querySelectorAll('input[type="text"]').forEach((element) => {
+      element.removeEventListener("input", updateHighlighting);
+      
     });
-
-    // Clean up event listeners on component unmount
-    return () => {
-      document.querySelectorAll("input").forEach((input) => {
-        input.removeEventListener("input", handleInputChange);
-      });
-    };
-  }, [
-    showInterestIncome,
+  };
+}, [showInterestIncome,
     showDividendIncome,
     showretirementIncome,
     showSelfemploymentIncome,
-    showUnemploymentIncome,
-  ]);
+    showUnemploymentIncome]);
   
   
   const handleNoneApplyChange = (event) => {
@@ -240,19 +242,33 @@ export const Income = () => {
     }, 0);
   };
   
-  const updateHighlighting = (event) => {
-    const inputVal = event.target.value;
-    const labelFor = event.target.getAttribute("id");
-    const label = document.querySelector(`label[for='${labelFor}']`);
-    if (label) {
-      if (inputVal) {
-        label.classList.add("highlight");
-      } else {
-        label.classList.remove("highlight");
+const updateHighlighting = (event) => {
+  const inputVal = event.target.value;
+  const labelFor = event.target.getAttribute("id");
+  const label = document.querySelector(`label[for='${labelFor}']`);
+  if (label) {
+    if (inputVal) {
+      // Remove non-numeric characters from the input value
+      const numericValue = inputVal.replace(/\D/g, '');
+      
+      // Format the numeric value with commas every three digits
+      let formattedValue = '';
+      for (let i = numericValue.length - 1, j = 0; i >= 0; i--, j++) {
+        // Add comma after every three digits except for the first group of digits
+        if (j > 0 && j % 3 === 0) {
+          formattedValue = ',' + formattedValue;
+        }
+        formattedValue = numericValue[i] + formattedValue;
       }
+      
+      // Update the input value with the formatted value
+      event.target.value = formattedValue;
+      label.classList.add("highlight");
+    } else {
+      label.classList.remove("highlight");
     }
-  };
-  
+  }
+};
   const DeleteNewJob = () => {
     setNumberOfInterestData((prevCount) => prevCount - 1);
   };
@@ -563,7 +579,7 @@ export const Income = () => {
           </div>
 		  <div class="add-another-job">
 		  <a href="#" class="add-job-btn" onClick={addNewJob}>
-			Add another job{" "}
+			Add another income source{" "}
 		  </a>
           </div>
           <div class="form-footer mt-5 pt-4 text-center">
@@ -593,11 +609,9 @@ export const Income = () => {
                     {...register("Unemployment", {
                       required: "This field is required",
                     })}
-				
-                    type="text"
+				    type="text"
                     id="Unemployment"
-					
-                  />
+				  />
                   <label for="Unemployment">Unemployment income</label>
                 </div>
               </li>
